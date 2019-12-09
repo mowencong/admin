@@ -13,46 +13,6 @@ import "./assets/css/main.less";
 import ElementUI from 'element-ui';
 import "element-ui/lib/theme-chalk/index.css";
 Vue.use(ElementUI);
-// import {
-//   Button,
-//   Input,
-//   Dialog,
-//   Menu,
-//   Submenu,
-//   MenuItem,
-//   Icon,
-//   Row,
-//   Col,
-//   Dropdown,
-//   DropdownMenu,
-//   DropdownItem,
-//   MenuItemGroup,
-//   Form,
-//   FormItem,
-//   Select,
-//   Option,
-//   Table,
-//   TableColumn,
-// } from "element-ui";
-// Vue.use(Button);
-// Vue.use(Input);
-// Vue.use(Dialog);
-// Vue.use(Menu);
-// Vue.use(Submenu);
-// Vue.use(MenuItem);
-// Vue.use(Icon);
-// Vue.use(Row);
-// Vue.use(Col);
-// Vue.use(Dropdown);
-// Vue.use(DropdownMenu);
-// Vue.use(DropdownItem);
-// Vue.use(MenuItemGroup);
-// Vue.use(Form);
-// Vue.use(FormItem);
-// Vue.use(Select);
-// Vue.use(Option);
-// Vue.use(Table);
-// Vue.use(TableColumn)
 Vue.prototype.$request = request;
 Vue.prototype.$axios = axios;
 Vue.config.productionTip = false;

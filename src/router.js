@@ -20,6 +20,7 @@ import UserList from './pages/userList.vue'
 import AdminList from './pages/adminList.vue'
 import Manage from './pages/manage.vue'
 import Info from './pages/info.vue'
+import addOrder from './pages/addOrder.vue'
 const router = new Router({
   linkActiveClass: 'active',
 	mode:'history',
@@ -87,7 +88,13 @@ const router = new Router({
         path:'/userList',
         name:'UserList',
         component: UserList,
-      }]
+      },
+      {
+        path:'/addOrder',
+        name:'addOrder',
+        component:addOrder,
+      }
+    ]
     },
     {
       path:'/login',

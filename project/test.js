@@ -245,7 +245,8 @@ app.post('/list',function(req,res){
 	})
 })
 //修改商品
-app.post('editGood',function(req,res){
+app.post('/editGood',function(req,res){
+	console.log('修改商品')
 	let name = req.body.name;
 	let price = req.body.price;
 	let saleprice = req.body.saleprice;
@@ -257,27 +258,37 @@ app.post('editGood',function(req,res){
 	if(name != undefined && price != undefined && saleprice != undefined && skutotal != undefined && specs != undefined && spu != undefined && type != undefined && imgurl != undefined){
 		let sql = "update shoplist set name='"+name+"',price='"+price+"',saleprice='"+saleprice+"',type='"+type+"',specs='"+specs+"',skutotal='"+skutotal+"',imgurl='"+imgurl+"' where spu = '"+spu+"'";
 		con.query(sql,function(err,result){
-			if(result != ''){
+			console.log('修改进来了吗')
+			if(err){
+				res.end("修改失败:" + err);
+				console.log('修改数据',err);
+			}else{
+				console.log('修改成功进来了吗')
 				let data = {
 					// code = res.statusCode,
 					status:1,
 					message:'修改成功'
 				}
 				res.end(JSON.stringify(data));
-			}else{
-				let data = {
-					// code = res.statusCode,
-					status:0,
-					message:'修改失败'
-				}
-				res.end(JSON.stringify(data))
 			}
 		})
 	}
 })
 // 删除商品
 app.post('/delGood',function(req,res){
-	
+	let id = req.body.id;
+	let sql = "delete from shoplist where id = '"+id+"'"
+	con.query(sql,function(err,result){
+		if(err){
+			res.end("删除失败:" + err);
+		}else{
+			let data = {
+				status:1,
+				message:'删除成功'
+			}
+			res.end(JSON.stringify(data))
+		}
+	})
 })
 //获取分类
 app.post('/classList',function(req,res){
@@ -359,5 +370,81 @@ app.post("/chk",upload.single('file'),function(req,res){
 		}
 		res.end(JSON.stringify(data))
 	}
+})
+//添加订单
+app.post("/addOrder",function(req,res){
+	let imgUrl = req.body.imgUrl
+	let name = req.body.name
+	let color = req.body.color
+	let size = req.body.size
+	let saleprice = req.body.saleprice
+	let totalprice = req.body.totalprice
+	let num = req.body.num
+	let spu = req.body.spu
+	if(imgUrl !='' && name != '' && color != '' && size != '' && saleprice != '' && totalprice != '' && num != '') {
+		function genID(length){
+			return Number(Math.random().toString().substr(3,length) + Date.now()).toString(36);
+		}
+		let orderNumber = genID(12)
+		let sql = "insert into addOrder (imgUrl,name,color,size,saleprice,totalprice,num,orderNumber,spu) value ('"+imgUrl+"','"+name+"','"+color+"','"+size+"','"+saleprice+"','"+totalprice+"','"+num+"','"+orderNumber+"','"+spu+"')"
+		con.query(sql,function(err,result){
+			if(err){
+				console.log(err)
+			}
+				console.log('jieguo',result)
+			if(result != undefined){
+				let r = {
+					code:res.statusCode,
+					status:1,
+					message:'添加订单成功'
+			 }
+				res.end(JSON.stringify(r))
+				console.log('成功订单数据',result)
+			 }else{
+			 let r = {
+				 code:res.statusCode,
+				 status:400,
+				 message:'添加订单失败'
+			 }
+				res.end(JSON.stringify(r))
+				console.log('失败订单数据',result)
+			 }
+		})
+	}else{
+		res.end('请选择商品规格')
+	}
+})
+//修改订单
+app.post('/ediOrder',function(req,res){
+	let imgUrl = req.body.imgUrl
+	let name = req.body.name
+	let color = req.body.color
+	let size = req.body.size
+	let saleprice = req.body.saleprice
+	let totalprice = req.body.totalprice
+	let num = req.body.num
+	let spu = req.body.spu
+	if(imgUrl !='' && name != '' && color != '' && size != '' && saleprice != '' && totalprice != '' && num != ''){
+		let sql = "update addorder set imgUrl='"+imgUrl+"',name='"+name+"',color='"+color+"',size='"+size+"',saleprice='"+saleprice+"',totalprice='"+totalprice+"',num='"+num+"' where spu = '"+spu+"'";
+		con.query(sql,function(err,result){
+			console.log('修改进来了吗')
+			if(err){
+				res.end("修改失败:" + err);
+				console.log('修改数据',err);
+			}else{
+				console.log('修改成功进来了吗')
+				let data = {
+					// code = res.statusCode,
+					status:1,
+					message:'修改成功'
+				}
+				res.end(JSON.stringify(data));
+			}
+		})
+	}
+})
+//获取订单列表
+app.get('/orderLisr',function(req,res){
+	
 })
 app.listen(8081);

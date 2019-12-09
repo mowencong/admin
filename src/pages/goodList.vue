@@ -118,9 +118,21 @@
 							type="danger"
 							@click="handleDelete(scope.$index, scope.row)">删除</el-button>
 						</template>
+						
 						</el-table-column>
 					</el-table>
 			</template>
+			<el-dialog
+				title="提示"
+				:visible.sync="centerDialogVisible"
+				width="30%"
+				center>
+				<span>确认删除这条商品记录吗</span>
+				<span slot="footer" class="dialog-footer">
+					<el-button @click="canselDel()">取 消</el-button>
+					<el-button type="primary" @click="suerDel()">确 定</el-button>
+				</span>
+			</el-dialog>
 		</div>
 		<div v-show="show1" class="error">{{this.message}}</div>
 		<!-- 编辑弹框 -->
@@ -254,6 +266,8 @@
 				spuValue:'',
 				dialogFormVisible: false,
 				specsFormVisible:false,
+				centerDialogVisible: false,
+				delArr:{},
 				 form: {
 					name: '',
 					id: '',
@@ -437,7 +451,21 @@
 			},
 			// 删除
 			handleDelete(index, row) {
+				this.centerDialogVisible = true
+				this.delArr = row
 				console.log(index, row);
+			},
+			suerDel(){
+				this.$request.post('/delGood',{
+					id:this.delArr.id
+				}).then(res=>{
+					this.centerDialogVisible = false
+					this.$toast(res.message)
+					console.log('这是删除的数据',res)
+				})
+			},
+			canselDel(){
+				this.centerDialogVisible = false
 			},
 			//   图片上传成功的钩子函数
 			handleAvatarSuccess(res, file) {
@@ -498,6 +526,7 @@
                 	// const subData = {new_category_id: this.selectMenu.value, specs: this.specs};
                 	const postData = {...this.ruleForm};
                     const res = await this.$request.post('/editGood',postData).then(res=>{
+						console.log('进来了吗修改')
 						if (res.status == 1) {
                         this.$message({
                             type: 'success',
